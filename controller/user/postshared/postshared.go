@@ -33,9 +33,13 @@ func Create(c *gin.Context) {
 	}
 	for _, v := range val {
 		if post.UserUuid != v.UserUuid {
-			c.JSON(http.StatusInternalServerError, nil)
+			c.JSON(http.StatusInternalServerError, "user is not your friend")
 			return
 		}
 	}
-	models_user_share.Create(i1, c.GetString("uuid"))
+	err = models_user_share.Create(i1, c.GetString("uuid"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "could not share post")
+		return
+	}
 }

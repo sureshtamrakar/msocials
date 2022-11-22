@@ -28,7 +28,12 @@ func Create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
 	}
-	models_user_post.Like(i1, uuid)
+	err = models_user_post.Like(i1, uuid)
+	if err != nil {
+
+		c.JSON(http.StatusInternalServerError, "could not like post")
+		return
+	}
 }
 
 func List(c *gin.Context) {
@@ -40,7 +45,7 @@ func List(c *gin.Context) {
 
 	val, err := models_user_post.LikeList(uuid)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, nil)
+		c.JSON(http.StatusInternalServerError, "you have not liked a post yet")
 		return
 	}
 	c.JSON(http.StatusOK, val)

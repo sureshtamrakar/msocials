@@ -54,7 +54,7 @@ func LoadAll(c *gin.Context) {
 	val, err := models_user_post.LoadAll(uuid)
 	if err != nil {
 
-		c.JSON(http.StatusInternalServerError, nil)
+		c.JSON(http.StatusInternalServerError, "no post to load")
 		return
 	}
 	c.JSON(http.StatusOK, val)

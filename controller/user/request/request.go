@@ -46,8 +46,11 @@ func Request(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, "user has sent friend request to you already")
 		return
 	}
-	models_user_request.Create(c.GetString("uuid"), uuid.Uuid)
-
+	err = models_user_request.Create(c.GetString("uuid"), uuid.Uuid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "Could not send friend request")
+		return
+	}
 }
 
 func RequestList(c *gin.Context) {
@@ -58,7 +61,7 @@ func RequestList(c *gin.Context) {
 	requestList, err := models_user_request.List(c.GetString("uuid"))
 	if err != nil {
 
-		c.JSON(http.StatusInternalServerError, nil)
+		c.JSON(http.StatusInternalServerError, "user have not recieved friend request yet")
 		return
 	}
 	var value []models_user.Entity
@@ -72,19 +75,3 @@ func RequestList(c *gin.Context) {
 	c.JSON(http.StatusOK, value)
 	return
 }
-
-// func RequestAccept(c *gin.Context) {
-// 	if !util_auth.Authenticate(c) {
-// 		c.JSON(http.StatusUnauthorized, nil)
-
-// 	}
-// 	var req AcceptRequest
-
-// 	if err := c.ShouldBindJSON(&req); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	models_user_friend.Create(c.GetString("uuid"), req.Uuid)
-// }

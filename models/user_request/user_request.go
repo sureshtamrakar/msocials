@@ -12,8 +12,11 @@ func Create(User_Uuid, Request_Uuid string) error {
 
 	stmt, _ := database_mysql.EsConn.Conn.Prepare("INSERT INTO user_requests_rel (user_uuid, request_uuid) VALUES (?,?)")
 	_, err := stmt.Exec(User_Uuid, Request_Uuid)
+	if err != nil {
+		return err
+	}
 	stmt.Close()
-	return err
+	return nil
 
 }
 
